@@ -1,0 +1,94 @@
+version: "3"
+services:
+  php:
+    build: .docker/php
+    container_name: "php-srv"
+    image: server-php-nginx
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - "9000:9000"
+    restart: always
+    networks:
+      - api-network
+
+  nginx:
+    image: nginx
+    container_name: "nginx-srv"
+    volumes:
+      - .docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./src:/var/www/html
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+    networks:
+      - api-network
+
+  postgres:
+    image: postgres:latest
+    container_name: "postgres-srv"
+    ports:
+      - "5432:5432"
+    volumes:
+      - .docker/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: "docker"
+    restart: always
+    networks:
+      - api-network
+
+  pgadmin:
+    container_name: "php-srv-pgadmin4"
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    environment:
+        PGADMIN_DEFAULT_EMAIL: "root@root.com.br"
+        PGADMIN_DEFAULT_PASSWORD: "root"
+    volumes:
+      - '.docker/db/postgresql:/var/lib/postgresql/data '
+    ports:
+      - '3380:80'
+    depends_on:
+      - postgres
+    networks:
+      - api-network
+
+  mongodb:
+    container_name: php-mongodb
+    image: mongo:latest
+    restart: unless-stopped
+    volumes:
+      - '.docker/db/mongodb:/data'
+      - '.docker/db/mongodb/db:/data/db'
+    ports:
+      - '27017:27017'
+    networks:
+      - api-network
+
+  redis:
+    container_name: php-redis
+    image: redis:latest
+    restart: unless-stopped
+    volumes:
+      - '.docker/db/redis:/data'
+    ports:
+      - '6379:6379'
+    networks:
+      - api-network
+
+  elasticsearch:
+    image: elasticsearch:6.5.4
+    container_name: api-elasticsearch
+    networks:
+     - api-network
+
+  memcached:
+    image: memcached:alpine
+    container_name: api-memcached
+    networks:
+      - api-network
+
+networks:
+  api-network:
+    driver: bridge
