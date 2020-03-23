@@ -6,7 +6,7 @@
 
 ## Quick Start
 * Clone or download this repository
-* Go inside of directory,  `cd lumen-docker`
+* Go inside of directory,  `cd PHP-Docker`
 * Run this command `docker-compose up -d`
 
 
