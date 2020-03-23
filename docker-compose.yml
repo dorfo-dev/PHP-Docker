@@ -33,7 +33,9 @@ services:
     volumes:
       - .docker/db:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: "docker"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "root"
+      PGDATA: /data/postgres
     restart: always
     networks:
       - api-network
@@ -46,7 +48,7 @@ services:
         PGADMIN_DEFAULT_EMAIL: "root@root.com.br"
         PGADMIN_DEFAULT_PASSWORD: "root"
     volumes:
-      - '.docker/db/postgresql:/var/lib/postgresql/data '
+      - '.docker/db/postgresql:/var/lib/postgresql/data'
     ports:
       - '3380:80'
     depends_on:
