@@ -1,7 +1,7 @@
 # Docker | Nginx | PHP 7.3.7 | Postgresql & PgAdmin
 
 ## Requirements:
-* docker >= 17.12.0+
+* docker >= 19.03.7
 * docker-compose
 
 ## Quick Start
